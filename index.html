@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>ربات استاد هانیا</title>
+  <script type="module">
+    import Puter from "https://esm.sh/puter-js";
+
+    const ai = new Puter();
+
+    async function askBot(message) {
+      const stream = await ai.chat({
+        messages: [
+          {
+            role: "system",
+            content: "تو دستیار برند استاد هانیا هستی. با لحن آرام، محترمانه، مشاورانه و سبک خسرو شکیبایی جواب می‌دی. فقط درباره نجاری، دکوراسیون چوبی و محصولات سفارشی چوبی صحبت کن.",
+          },
+          {
+            role: "user",
+            content: message,
+          }
+        ],
+        stream: true,
+      });
+
+      let fullMessage = "";
+      for await (const chunk of stream) {
+        fullMessage += chunk;
+        document.getElementById("response").innerText = fullMessage;
+      }
+    }
+
+    window.askBot = askBot;
+  </script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding: 50px; direction: rtl;">
+  <h2>ربات استاد هانیا</h2>
+  <input id="msg" placeholder="پیام خود را وارد کنید..." style="width: 300px; padding: 10px;" />
+  <button onclick="askBot(document.getElementById('msg').value)" style="padding: 10px 20px;">بپرس</button>
+  <pre id="response" style="margin-top: 20px; text-align: right; white-space: pre-wrap;"></pre>
+</body>
+</html>
